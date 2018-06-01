@@ -10,10 +10,14 @@ def do(cmd):
 
 def test_basic_flow(tmpdir):
     tmpdir.chdir()
+    borg_repo = tmpdir.join("borg")
     tmpdir.ensure("data/initial.bin").write_binary(DATA)
-    do("BORG_PASSPHRASE=example borg init borg_repo -e authenticated")
-    do("BORG_PASSPHRASE=example borg create borg_repo::data data")
+    do(f"BORG_PASSPHRASE=example borg init {borg_repo} -e authenticated")
+    do(f"BORG_PASSPHRASE=example borg create {borg_repo}::data data")
     do("git init annex")
     tmpdir.join("annex").chdir()
     do("git annex init")
-    do("git annex initremote foo type=external externaltype=borg encryption=none")
+    do(
+        f"git annex initremote foo type=external externaltype=borg "
+        f"encryption=none borg_repo={borg_repo}"
+    )

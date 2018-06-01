@@ -90,6 +90,18 @@ class Getgitdir(SimpleMsgMixin, Msg):
 
 
 @msgclass
+class Getconfig(Msg):
+    key = attr.ib()
+
+    @classmethod
+    def from_part(cls, part):
+        return cls(part)
+
+    def to_part(self):
+        return self.key
+
+
+@msgclass
 class InitremoteSuccess(SimpleMsgMixin, Msg):
     pass
 

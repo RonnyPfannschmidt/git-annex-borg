@@ -1,0 +1,35 @@
+{
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				"__pycache__"
+			],
+			"name": "tests",
+			"path": "testing"
+		},
+		{
+			"folder_exclude_patterns":
+			[
+				"__pycache__"
+			],
+			"name": "code",
+			"path": "src/git_annex_borg"
+		},
+		{
+			"folder_exclude_patterns":
+			[
+				".env",
+				".pytest_cache",
+				"build",
+				"dist",
+				"*.egg-info",
+				"src",
+				"testing"
+			],
+			"name": "root",
+			"path": "."
+		}
+	]
+}
