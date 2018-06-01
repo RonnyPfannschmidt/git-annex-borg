@@ -3,7 +3,7 @@ import re
 import logging
 
 log = logging.getLogger(__name__)
-
+log.setLevel(logging.WARNING)
 KNOWN_COMMANDS = {}
 CLASS_TO_COMMAND = {}
 
@@ -68,7 +68,24 @@ class Version(Msg):
 
 
 @msgclass
+class Value(Msg):
+    value = attr.ib()
+
+    @classmethod
+    def from_part(cls, part):
+        return cls(part)
+
+    def to_part(self):
+        return self.value
+
+
+@msgclass
 class Initremote(SimpleMsgMixin, Msg):
+    pass
+
+
+@msgclass
+class Getgitdir(SimpleMsgMixin, Msg):
     pass
 
 

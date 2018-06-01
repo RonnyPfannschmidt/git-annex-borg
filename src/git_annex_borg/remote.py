@@ -43,6 +43,8 @@ def prepare(io: MsgIO):
 
 def initremote(io: MsgIO):
     log.info("Initremote borg annex")
+    gitdir = io.request_value(p.Getgitdir())
+    log.debug(gitdir)
     io.send(p.InitremoteSuccess())
 
 
