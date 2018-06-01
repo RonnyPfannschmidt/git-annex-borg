@@ -1,5 +1,7 @@
-import sys
+from typing import Optional
 from . import protocol as p
+
+from .msgio import MsgIO
 
 # rom .state import AnnexBorgState
 import logging
@@ -7,32 +9,43 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def reply(msg):
-    print(msg, flush=True)
-
-
-def main(stream=sys.stdin):
-    logging.basicConfig(level=logging.INFO)
+def main(msgio: Optional[MsgIO] = None):
+    logging.basicConfig(level=logging.DEBUG)
+    if msgio is None:
+        msgio = MsgIO.from_stdio()
     try:
-        return run(map(p.Msg.from_line, stream))
+        return run(msgio)
     except Exception:
         log.exception("main failed")
 
 
-def run(messages):
+def run(io: MsgIO):
     log.info("starting remote")
-    reply(p.Version())
-    for msg in messages:
+    io.send(p.Version())
+    for msg in io:
         if isinstance(msg, p.Prepare):
-            prepare(messages)
+            remote = prepare(io)
             break
         elif isinstance(msg, p.Exportsupported):
-            reply(msg.reply())
+            io.send(msg.reply())
         elif isinstance(msg, p.Initremote):
-            reply("FAULT")
+            remote = initremote(io)
+            break
         else:
             assert False, msg
 
+    runremote(remote, io)
 
-def prepare(messages):
+
+def prepare(io: MsgIO):
+    log.info("Preparing borg annex")
+
+
+def initremote(io: MsgIO):
+    log.info("Initremote borg annex")
+    io.send(p.InitremoteSuccess())
+
+
+def runremote(remote, io: MsgIO):
+    log.info("running remote")
     pass

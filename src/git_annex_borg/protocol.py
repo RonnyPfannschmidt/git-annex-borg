@@ -69,10 +69,12 @@ class Version(Msg):
 
 @msgclass
 class Initremote(SimpleMsgMixin, Msg):
+    pass
 
-    @classmethod
-    def from_part(cls, part):
-        return cls()
+
+@msgclass
+class InitremoteSuccess(SimpleMsgMixin, Msg):
+    pass
 
 
 @msgclass
