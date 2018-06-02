@@ -4,6 +4,8 @@ import logging
 from .protocol import Msg, Value
 
 log = logging.getLogger(__name__)
+log_lines = log.getChild("lines")
+log_messages = log.getChild("messages")
 
 
 @attr.s
@@ -19,14 +21,17 @@ class MsgIO(object):
         return self
 
     def __next__(self) -> Msg:
-        msg = Msg.from_line(self._input.readline())
-        log.debug("in %r", msg)
+        line = self._input.readline().rstrip("\n")
+        log_lines.debug("in %s", line)
+        msg = Msg.from_line(line)
+        log_messages.debug("in %r", msg)
         return msg
 
     def send(self, msg: Msg):
-        log.debug("out %r", msg)
-        self._output.write(str(msg))
-        self._output.write("\n")
+        log_messages.debug("out %r", msg)
+
+        log_lines.debug("out %s", msg)
+        self._output.write(f"{msg}\n")
         self._output.flush()
 
     def request(self, msg, expected=Msg):

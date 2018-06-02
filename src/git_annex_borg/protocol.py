@@ -1,9 +1,7 @@
 import attr
 import re
-import logging
+import enum
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.WARNING)
 KNOWN_COMMANDS = {}
 CLASS_TO_COMMAND = {}
 
@@ -37,7 +35,6 @@ class Msg:
             cmd = line
             part = None
         inst = KNOWN_COMMANDS[cmd].from_part(part)
-        log.debug(inst)
         return inst
 
     def __str__(self):
@@ -121,3 +118,80 @@ class ExportsupportedFailure(SimpleMsgMixin, Msg):
 @msgclass
 class Prepare(SimpleMsgMixin, Msg):
     pass
+
+
+@msgclass
+class PrepareSuccess(SimpleMsgMixin, Msg):
+    pass
+
+
+@msgclass
+class Getcost(SimpleMsgMixin, Msg):
+    pass
+
+
+@msgclass
+class Cost(Msg):
+    cost = attr.ib()
+
+    @classmethod
+    def from_part(cls, part):
+        return cls(int(part))
+
+    def to_part(self):
+        return str(self.cost)
+
+
+@msgclass
+class Getavailability(SimpleMsgMixin, Msg):
+    pass
+
+
+class AvailabilityScope(enum.Enum):
+    LOCAL = 1
+    GLOBAL = 2
+
+
+@msgclass
+class Availability(Msg):
+    scope = attr.ib()
+
+    def to_part(self):
+        return str(self.scope)
+
+
+@msgclass
+class Setconfig(Msg):
+    key = attr.ib()
+    value = attr.ib()
+
+    def to_part(self):
+        return f"{self.key} {self.value}"
+
+
+@msgclass
+class Setcreds(Msg):
+    key = attr.ib()
+    user = attr.ib()
+    password = attr.ib()
+
+    def to_part(self):
+        return f"{self.key} {self.user} {self.password}"
+
+
+@msgclass
+class Getcreds(Msg):
+    key = attr.ib()
+
+    def to_part(self):
+        return self.key
+
+
+@msgclass
+class Creds(Msg):
+    key = attr.ib()
+    user = attr.ib()
+    password = attr.ib()
+
+    def to_part(self):
+        return f"{self.key} {self.user} {self.password}"

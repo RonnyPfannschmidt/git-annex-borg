@@ -5,7 +5,7 @@ DATA = b"\x00" * 1000
 
 def do(cmd):
     print("do", cmd, flush=True)
-    subprocess.check_call(cmd, shell=isinstance(cmd, str))
+    subprocess.check_call(cmd, shell=isinstance(cmd, str), stderr=subprocess.STDOUT)
 
 
 def test_basic_flow(tmpdir):
@@ -19,5 +19,10 @@ def test_basic_flow(tmpdir):
     do("git annex init")
     do(
         f"git annex initremote foo type=external externaltype=borg "
-        f"encryption=none borg_repo={borg_repo}"
+        f"encryption=none repo={borg_repo} passphrase=example "
+        f"exporttree=no"
     )
+    output = subprocess.getoutput("git annex info foo")
+    print(output)
+    # todo - get infos
+    # assert f"repo: {borg_repo}" in output
