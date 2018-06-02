@@ -1,5 +1,5 @@
 #!/bin/bash
-set +ev
+set +evx
 CD=~/.cache/curl-downloads
 FN=git-annex-standalone-amd64.tar.gz
 URL=https://downloads.kitenet.net/git-annex/linux/current/$FN
@@ -21,4 +21,6 @@ fi
 
 mkdir -p $TARGET
 tar --directory=$TARGET --strip-components=1 -x -f $CD/$FN
+
+mkdir -p ~/.local/bin
 ln -sf $TARGET/git-annex  ~/.local/bin/git-annex

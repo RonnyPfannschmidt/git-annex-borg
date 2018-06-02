@@ -1,5 +1,5 @@
 #!/bin/bash
-set +ev
+set +evx
 CD=~/.cache/curl-downloads
 FN=borg-linux64
 URL=https://github.com/borgbackup/borg/releases/download/1.1.6/$FN
