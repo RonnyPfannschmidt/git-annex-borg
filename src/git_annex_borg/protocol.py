@@ -25,7 +25,6 @@ def msgclass(cls):
 
 @attr.s(str=False, frozen=True)
 class Msg:
-
     @classmethod
     def from_line(cls, line):
         line = line.rstrip("\n")
@@ -46,7 +45,6 @@ class Msg:
 
 
 class SimpleMsgMixin(object):
-
     @classmethod
     def from_part(cls, part):
         assert not part
@@ -105,7 +103,6 @@ class InitremoteSuccess(SimpleMsgMixin, Msg):
 
 @msgclass
 class Exportsupported(SimpleMsgMixin, Msg):
-
     def reply(self):
         return ExportsupportedFailure()
 
