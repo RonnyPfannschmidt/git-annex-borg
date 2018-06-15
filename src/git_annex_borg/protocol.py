@@ -103,12 +103,20 @@ class InitremoteSuccess(SimpleMsgMixin, Msg):
 
 @msgclass
 class Exportsupported(SimpleMsgMixin, Msg):
-    def reply(self):
+    def failure(self):
         return ExportsupportedFailure()
+
+    def success(self):
+        return ExportsupportedSuccess()
 
 
 @msgclass
 class ExportsupportedFailure(SimpleMsgMixin, Msg):
+    pass
+
+
+@msgclass
+class ExportsupportedSuccess(SimpleMsgMixin, Msg):
     pass
 
 
@@ -186,9 +194,9 @@ class Getcreds(Msg):
 
 @msgclass
 class Creds(Msg):
-    key = attr.ib()
     user = attr.ib()
     password = attr.ib()
 
-    def to_part(self):
-        return f"{self.key} {self.user} {self.password}"
+    @classmethod
+    def from_part(cls, part):
+        return cls(*part.split(" ", 1))

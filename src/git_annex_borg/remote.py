@@ -27,7 +27,7 @@ def run(io: MsgIO):
             remote = prepare(io)
             break
         elif isinstance(msg, p.Exportsupported):
-            io.send(msg.reply())
+            io.send(msg.success())
             return  # exit here due to annex issue
         elif isinstance(msg, p.Initremote):
             remote = initremote(io)
@@ -66,6 +66,6 @@ def runremote(remote, io: MsgIO):
         elif isinstance(msg, p.Getavailability):
             io.send(p.Availability(p.AvailabilityScope.LOCAL))
         elif isinstance(msg, p.Exportsupported):
-            io.send(msg.reply())
+            io.send(msg.success())
         else:
             return
