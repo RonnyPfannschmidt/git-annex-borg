@@ -13,3 +13,12 @@ then
 	curl -o $CD/$FN.tmp -C - $URL
 	mv $CD/$FN.tmp $CD/$FN
 fi
+
+if [ -e $TARGET ]
+then
+	rm -rf $TARGET
+fi
+
+mkdir -p $TARGET
+tar --directory=$TARGET --strip-components=1 -x -f $CD/$FN
+ln -sf $TARGET/git-annex  ~/.local/bin/git-annex
