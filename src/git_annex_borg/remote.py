@@ -23,7 +23,11 @@ def run(io: MsgIO):
     log.info("starting remote")
     io.send(p.Version())
     for msg in io:
-        if isinstance(msg, p.Prepare):
+        if isinstance(msg, p.Extensions):
+            log.warning(msg)
+            io.send(p.UnsupportedRequest())
+            continue
+        elif isinstance(msg, p.Prepare):
             remote = prepare(io)
             break
         elif isinstance(msg, p.Exportsupported):

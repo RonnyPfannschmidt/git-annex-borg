@@ -63,6 +63,18 @@ class Version(Msg):
 
 
 @msgclass
+class Extensions(Msg):
+    extensions = attr.ib(converter=set)
+
+    @classmethod
+    def from_part(cls, part):
+        return cls(part.split())
+
+    def to_part(self):
+        return " ".join(self.extensions)
+
+
+@msgclass
 class Value(Msg):
     value = attr.ib()
 
@@ -72,6 +84,11 @@ class Value(Msg):
 
     def to_part(self):
         return self.value
+
+
+@msgclass
+class UnsupportedRequest(SimpleMsgMixin, Msg):
+    pass
 
 
 @msgclass
