@@ -1,9 +1,11 @@
 language: python
 python:
 - '3.6'
-
-
+env:
+  - LC_ALL=C
 install:
+- bash scripts/install-annex-latest-build.sh
+- bash scripts/install-borg-latest-build.sh
 - pip install -U pip setuptools setuptools_scm
 - pip install -e .
 - pip install pytest
