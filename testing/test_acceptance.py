@@ -12,6 +12,7 @@ def do(cmd):
 @pytest.fixture(autouse=True)
 def borg_env(monkeypatch):
     monkeypatch.setenv("BORG_PASSPHRASE", "example")
+    monkeypatch.setenv("PYTHONUNBUFFERED", "yes")
 
 
 def test_basic_flow(tmpdir):

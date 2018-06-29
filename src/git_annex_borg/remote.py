@@ -50,16 +50,17 @@ def prepare(io: MsgIO):
 
     log.debug("git: %s, borg: %s, pass: %s", gitdir, borg_repo, borg_pass)
     io.send(p.PrepareSuccess())
+    return borg_repo
 
 
 def initremote(io: MsgIO):
     gitdir = io.request_value(p.Getgitdir())
     borg_repo = io.request_value(p.Getconfig("repo"))
-    borg_pass = io.request_value(p.Getconfig("passphrase"))
     io.send(p.Setconfig("repo", borg_repo))
-    io.send(p.Setcreds("borg", "~", borg_pass))
-    log.debug("git: %s, borg: %s, pass: %s", gitdir, borg_repo, borg_pass)
+    io.send(p.Setcreds("borg", "~", "~"))
+    log.debug("git: %s, borg: %s", gitdir, borg_repo)
     io.send(p.InitremoteSuccess())
+    return borg_repo
 
 
 def runremote(remote, io: MsgIO):
@@ -71,6 +72,10 @@ def runremote(remote, io: MsgIO):
             io.send(p.Availability(p.AvailabilityScope.LOCAL))
         elif isinstance(msg, p.Exportsupported):
             io.send(msg.success())
+        elif isinstance(msg, p.Getinfo):
+            io.send(p.Infofield("borg repo"))
+            io.send(p.Infovalue(remote))
+            io.send(p.Infoend())
         else:
-            log.debug(msg)
+            log.debug("unknown %", msg)
             return

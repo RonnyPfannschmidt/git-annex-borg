@@ -210,6 +210,32 @@ class Getcreds(Msg):
 
 
 @msgclass
+class Getinfo(SimpleMsgMixin, Msg):
+    pass
+
+
+@msgclass
+class Infoend(SimpleMsgMixin, Msg):
+    pass
+
+
+@msgclass
+class Infofield(Msg):
+    name = attr.ib()
+
+    def to_part(self):
+        return self.name
+
+
+@msgclass
+class Infovalue(Msg):
+    value = attr.ib()
+
+    def to_part(self):
+        return self.value
+
+
+@msgclass
 class Creds(Msg):
     user = attr.ib()
     password = attr.ib()
