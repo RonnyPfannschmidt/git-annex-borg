@@ -22,6 +22,9 @@ class MsgIO(object):
 
     def __next__(self) -> Msg:
         line = self._input.readline().rstrip("\n")
+        if not line:
+            log.debug("end of input")
+            raise StopIteration()
         log_lines.debug("in %s", line)
         msg = Msg.from_line(line)
         log_messages.debug("in %r", msg)

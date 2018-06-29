@@ -179,7 +179,7 @@ class Availability(Msg):
     scope = attr.ib()
 
     def to_part(self):
-        return str(self.scope)
+        return self.scope.name
 
 
 @msgclass

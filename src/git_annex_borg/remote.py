@@ -25,7 +25,7 @@ def run(io: MsgIO):
     for msg in io:
         if isinstance(msg, p.Extensions):
             log.warning(msg)
-            io.send(p.UnsupportedRequest())
+            io.send(p.Extensions({"INFO"}))
             continue
         elif isinstance(msg, p.Prepare):
             remote = prepare(io)
@@ -72,4 +72,5 @@ def runremote(remote, io: MsgIO):
         elif isinstance(msg, p.Exportsupported):
             io.send(msg.success())
         else:
+            log.debug(msg)
             return
