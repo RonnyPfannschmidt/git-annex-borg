@@ -26,7 +26,8 @@
 				"dist",
 				"*.egg-info",
 				"src",
-				"testing"
+				"testing",
+				".mymy_cache"
 			],
 			"name": "root",
 			"path": "."
