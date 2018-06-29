@@ -6,7 +6,7 @@ env:
 install:
 - bash scripts/install-annex-latest-build.sh
 - bash scripts/install-borg-latest-build.sh
-- pip install -U pip setuptools setuptools_scm
+- pip install -U pip setuptools setuptools_scm attrs
 - pip install -e .
 - pip install pytest
 script:
