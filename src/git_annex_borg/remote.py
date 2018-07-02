@@ -2,8 +2,7 @@ from typing import Optional
 from . import protocol as p
 
 from .msgio import MsgIO
-
-# rom .state import AnnexBorgState
+from .borg_control import BorgControl
 import logging
 
 log = logging.getLogger(__name__)
@@ -46,21 +45,20 @@ def prepare(io: MsgIO):
     log.info("Preparing borg annex")
     gitdir = io.request_value(p.Getgitdir())
     borg_repo = io.request_value(p.Getconfig("repo"))
-    borg_pass = io.request(p.Getcreds("borg"), p.Creds).password
-
-    log.debug("git: %s, borg: %s, pass: %s", gitdir, borg_repo, borg_pass)
+    control = BorgControl(path=borg_repo, passphrase="")
+    log.debug("git: %s, borg: %s", gitdir, control)
     io.send(p.PrepareSuccess())
-    return borg_repo
+    return control
 
 
 def initremote(io: MsgIO):
     gitdir = io.request_value(p.Getgitdir())
     borg_repo = io.request_value(p.Getconfig("repo"))
     io.send(p.Setconfig("repo", borg_repo))
-    io.send(p.Setcreds("borg", "~", "~"))
-    log.debug("git: %s, borg: %s", gitdir, borg_repo)
+    control = BorgControl(path=borg_repo, passphrase="")
+    log.debug("git: %s, borg: %s", gitdir, control)
     io.send(p.InitremoteSuccess())
-    return borg_repo
+    return control
 
 
 def runremote(remote, io: MsgIO):
@@ -74,7 +72,10 @@ def runremote(remote, io: MsgIO):
             io.send(msg.success())
         elif isinstance(msg, p.Getinfo):
             io.send(p.Infofield("borg repo"))
-            io.send(p.Infovalue(remote))
+            io.send(p.Infovalue(remote.path))
+            for archive in remote.get_unindexed_archives():
+                io.send(p.Infofield("borg unindexed archive"))
+                io.send(p.Infovalue(archive.name))
             io.send(p.Infoend())
         else:
             log.debug("unknown %", msg)

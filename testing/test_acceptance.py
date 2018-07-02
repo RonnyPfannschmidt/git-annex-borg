@@ -21,6 +21,7 @@ def test_basic_flow(tmpdir):
     tmpdir.ensure("data/initial.bin").write_binary(DATA)
     do(f"borg init {borg_repo} -e authenticated")
     do(f"borg create {borg_repo}::data data")
+    do(f"borg create {borg_repo}::data2 data")
     do("git init annex")
     tmpdir.join("annex").chdir()
     do("git annex init")
@@ -33,3 +34,5 @@ def test_basic_flow(tmpdir):
     print(output)
     # todo - get infos
     assert f"borg repo: {borg_repo}" in output
+    assert "borg unindexed archive: data" in output
+    assert "borg unindexed archive: data2" in output
