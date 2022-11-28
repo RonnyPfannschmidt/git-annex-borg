@@ -44,7 +44,7 @@ class Msg:
             return CLASS_TO_COMMAND[type(self)]
 
 
-class SimpleMsgMixin(object):
+class SimpleMsgMixin:
     @classmethod
     def from_part(cls, part):
         assert not part
