@@ -9,7 +9,7 @@ log_messages = log.getChild("messages")
 
 
 @attr.s
-class MsgIO(object):
+class MsgIO:
     _input = attr.ib()
     _output = attr.ib()
 
